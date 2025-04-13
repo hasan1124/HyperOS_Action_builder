@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       STOCK_URL:
-        description: "İşlenecek stok ROM/xiaomi.eu taban ROM indirme adresi"
+        description: https://mega.nz/file/r8kAGaID#pTNKgEV4-Xhm4A229dzsvsQk3foK2-uHHwLMCw9hqL8
         required: true
-        default: 'https://cdnorg.d.miui.com/V14.0.8.0.TKKCNXM/miui_SAGIT_V14.0.8.0.TKKCNXM_example.zip'
+        default: 'https://mega.nz/file/r8kAGaID#pTNKgEV4-Xhm4A229dzsvsQk3foK2-uHHwLMCw9hqL8'
       PORT_URL:
         description: https://netix.dl.sourceforge.net/project/xiaomi-eu-multilang-miui-roms/xiaomi.eu/HyperOS-STABLE-RELEASES/HyperOS2.0/xiaomi.eu_SUNSTONE_OS2.0.2.0.UMQCNXM_14.zip?viasf=1
         required: true
