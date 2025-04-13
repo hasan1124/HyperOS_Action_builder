@@ -1,29 +1,29 @@
-name: build_haydn_hos_1drv
+name: build_sagit_hos_2.0
 on:
   workflow_dispatch:
     inputs:
       STOCK_URL:
-        description: "待操作的底包/xiaomi.eu底包下载地址"
+        description: "İşlenecek stok ROM/xiaomi.eu taban ROM indirme adresi"
         required: true
-        default: 'https://cdnorg.d.miui.com/V14.0.8.0.TKKCNXM/miui_HAYDN_V14.0.8.0.TKKCNXM_e3deaf183b_13.0.zip'
+        default: 'https://cdnorg.d.miui.com/V14.0.8.0.TKKCNXM/miui_SAGIT_V14.0.8.0.TKKCNXM_example.zip'
       PORT_URL:
-        description: "待操作的移植包下载地址"
+        description: https://netix.dl.sourceforge.net/project/xiaomi-eu-multilang-miui-roms/xiaomi.eu/HyperOS-STABLE-RELEASES/HyperOS2.0/xiaomi.eu_HOUJI_OS2.0.109.0.VNCCNXM_15.zip?viasf=1
         required: true
         
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - name: 最大化构建环境
+      - name: Maksimum yapı ortamı
         uses: easimon/maximize-build-space@master
         with:
           swap-size-mb: 8192
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
-      - name: 检出仓库文件
+      - name: Depoyu kontrol et
         uses: actions/checkout@main
-      - name: 1.准备环境
+      - name: 1. Ortamı Hazırla
         run: |
           sudo apt install aria2 python3 busybox zip tar apktool unzip p7zip-full openjdk-8-jre zipalign zstd bc android-sdk-libsparse-utils
           sudo apt --fix-broken install
@@ -33,7 +33,7 @@ jobs:
           curl https://rclone.org/install.sh | sudo bash
           mkdir -p ~/.config/rclone/
           unzip -P ${{ secrets.PASSWORD }} "$GITHUB_WORKSPACE"/tools/rclone.zip -d ~/.config/rclone/
-      - name: 2.克隆仓库
+      - name: 2. Depoyu Klonla
         run: |
           git clone --depth 1 https://github.com/lovezhen520/HyperOS_Action_builder hyperos_port
           aria2c -s 10 -x 10 -o devices.zip -d ./hyperos_port "${{ secrets.LINK }}"
@@ -43,21 +43,22 @@ jobs:
           7z x ../devices.zip
           cd ..
           rm -rf devices.zip
-      - name: 3. 开始移植
+      - name: 3. Portlama İşlemini Başlat
         run: |
           cd hyperos_port
           sudo bash port.sh "${{ github.event.inputs.STOCK_URL }}" "${{ github.event.inputs.PORT_URL }}" | tee HyperOS_portlog.log
-      - name: 4.上传到 OneDrive
+      - name: 4. OneDrive'a Yükle
         run: |
-            rclone mkdir onedrive:/Hyperos/haydn
-            rclone sync -P ./hyperos_port/out/*.zip onedrive:/Hyperos/haydn
+            rclone mkdir onedrive:/Hyperos/sagit
+            rclone sync -P ./hyperos_port/out/hyperos2.0_A14_Sagit.zip onedrive:/Hyperos/sagit
             cd ${{ github.workspace }}
             touch info.md
-            echo "提交日期：$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')" >> info.md
-            echo "移植底包链接：${{ github.event.inputs.STOCK_URL }}" >> info.md
-            echo "移植机型链接：${{ github.event.inputs.PORT_URL }}" >> info.md
+            echo "Gönderim Tarihi: $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')" >> info.md
+            echo "Stok ROM Bağlantısı: ${{ github.event.inputs.STOCK_URL }}" >> info.md
+            echo "Port ROM Bağlantısı: ${{ github.event.inputs.PORT_URL }}" >> info.md
+            echo "HyperOS Sürümü: 2.0 (Android 14)" >> info.md
             
-      - name: 5.上传本次打包 LOG 至 Release
+      - name: 5. Bu Çalışmanın Log Dosyasını Release'e Yükle
         uses: ncipollo/release-action@v1.12.0
         with:
             artifacts: "/home/runner/work/HyperOS_Action_builder/HyperOS_Action_builder/hyperos_port/HyperOS_portlog.log"
