@@ -7,7 +7,7 @@ on:
         required: true
         default: 'https://cdnorg.d.miui.com/V14.0.8.0.TKKCNXM/miui_SAGIT_V14.0.8.0.TKKCNXM_example.zip'
       PORT_URL:
-        description: https://netix.dl.sourceforge.net/project/xiaomi-eu-multilang-miui-roms/xiaomi.eu/HyperOS-STABLE-RELEASES/HyperOS2.0/xiaomi.eu_HOUJI_OS2.0.109.0.VNCCNXM_15.zip?viasf=1
+        description: https://netix.dl.sourceforge.net/project/xiaomi-eu-multilang-miui-roms/xiaomi.eu/HyperOS-STABLE-RELEASES/HyperOS2.0/xiaomi.eu_SUNSTONE_OS2.0.2.0.UMQCNXM_14.zip?viasf=1
         required: true
         
 jobs:
